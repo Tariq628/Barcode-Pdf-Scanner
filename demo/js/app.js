@@ -42,7 +42,7 @@ function onceHandler(once) {
         staticHolder.style.display = 'none';
     }
     configs.scale.once = once;
-    writeConfigs();
+    // writeConfigs();
 }
 
 function singleMultiHandler(isMulti) {
@@ -61,58 +61,58 @@ function singleMultiHandler(isMulti) {
     configs.resultOpts.multiCodesInPage = multi;
     configs.resultOpts.singleCodeInPage = !multi;
     configs.resultOpts.maxCodesInPage = 1;
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleHalfSample(half) {
     configs.quagga.locator.halfSample = half;
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleLocate(locate) {
     configs.quagga.locate = locate;
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleValueChange(value) {
     configs.scale.value = parseFloat(value);
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleStartChange(value) {
     configs.scale.start = parseFloat(value);
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleStepChange(value) {
     configs.scale.step = parseFloat(value);
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleStopChange(value) {
     configs.scale.stop = parseFloat(value);
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleMaxCodesChange(value) {
     configs.resultOpts.maxCodesInPage = parseFloat(value);
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleNoisifyChange(value) {
     configs.noisify = value;
-    writeConfigs();
+    // writeConfigs();
 }
 
 function handleSmartChange(value) {
     configs.improve = value;
-    writeConfigs();
+    // writeConfigs();
 }
 
 
 window.onload = function (e) {
 
-    writeConfigs();
+    // writeConfigs();
 
     var elems = document.getElementsByName("barcode_types[]");
     for (var i = 0; i < elems.length; i++) {
@@ -129,7 +129,7 @@ window.onload = function (e) {
                 if (index !== -1)
                     array_ref.splice(index, 1);
             }
-            writeConfigs();
+            // writeConfigs();
 
         }, false);
     }
@@ -150,35 +150,35 @@ window.onload = function (e) {
                 if (index !== -1)
                     array_ref.splice(index, 1);
             }
-            writeConfigs();
+            // writeConfigs();
 
         }, false);
     }
 
-    var copyTextinputBtn = document.querySelector('.js-textinputcopybtn');
-    copyTextinputBtn.addEventListener('click', function(event) {
+    // var copyTextinputBtn = document.querySelector('.js-textinputcopybtn');
+    // copyTextinputBtn.addEventListener('click', function(event) {
 
-        var copyTextinput = document.getElementById('configs');
-        copyTextinput.innerHTML = JSON.stringify(configs, undefined, 4);
-        copyTextinput.select();
+    //     var copyTextinput = document.getElementById('configs');
+    //     copyTextinput.innerHTML = JSON.stringify(configs, undefined, 4);
+    //     copyTextinput.select();
 
-        try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Copying text input command was ' + msg);
-        } catch (err) {
-            console.log('Oops, unable to copy');
-        }
-    });
+    //     try {
+    //         var successful = document.execCommand('copy');
+    //         var msg = successful ? 'successful' : 'unsuccessful';
+    //         console.log('Copying text input command was ' + msg);
+    //     } catch (err) {
+    //         console.log('Oops, unable to copy');
+    //     }
+    // });
 };
 
-function writeConfigs() {
-    var copyTextinput = document.getElementById('configs');
-    copyTextinput.innerHTML = JSON.stringify(configs, undefined, 4);
+// function writeConfigs() {
+//     var copyTextinput = document.getElementById('configs');
+//     copyTextinput.innerHTML = JSON.stringify(configs, undefined, 4);
 
-    var confstr = JSON.stringify(configs);
-    console.log(confstr);
-}
+//     var confstr = JSON.stringify(configs);
+//     console.log(confstr);
+// }
 
 function addrow(text) {
     var tableRef = document.getElementById('summary').getElementsByTagName('tbody')[0];
