@@ -46,7 +46,7 @@
 <div class="formholder">
     <div class="left">
         <div class="left">
-            <input id="pdfentryfile" type="file"
+            <input id="pdfmultiifiles" type="file"
                    accept="application/pdf"
                    size="40" style="float: left;" multiple="multiple">
             <input id="pdfsinglefile" type="file"
@@ -60,7 +60,8 @@
             </select>
             <input type="number" min="1" step="1" id="pageNr" style="display: none; width: 40px">
             <br><br>
-            <button onclick="decodePdf()" id="decode_btn" style="width: 120px;"> Decode PDF</button>
+            <button id="decode_btn" class="btn btn-primary" style="width: 120px;"> Decode PDF</button>
+            <button onclick="nextFile()" id="next_file" class="btn btn-primary" style="width: 120px;"> Next File</button>
         </div>
 
         <div class="resultHolder">
@@ -226,6 +227,19 @@
     //     });
     // })
     let canvas_image;
+    let i = 0;
+    function nextFile() {
+        var multiFiles = document.getElementById('pdfmultiifiles');
+        var t = multiFiles.files;
+        var singleFile = document.getElementById('pdfsinglefile');
+        var single = t[i]
+        let list = new DataTransfer();
+        list.items.add(single);
+        pdfsinglefile.files = list.files;
+        i += 1
+        decodePdf()
+
+    }
     function decodePdf() {
 
         const resultHolder = document.getElementById('holder');
@@ -251,7 +265,7 @@
 
                 if (result.codesByPage !== undefined) // full document scanned
                 {
-                        var pdf = document.getElementById('pdfentryfile');
+                        var pdf = document.getElementById('pdfmultiifiles');
                         var ind = 0;
                         for (var page in result.codesByPage) {
                                 // var imgData  = canvas_image.toDataURL("image/jpeg", 1.0);
@@ -346,14 +360,7 @@
         }
 
         // decode pdf call (all code you need to call in order to scan barcodes in you pdfs
-        var input_file = document.getElementById('pdfentryfile');
-        var pdfsinglefile = document.getElementById('pdfsinglefile');
-        let t = input_file.files;
-        for (let index = 0; index < t.length; index++) {
-            var element = t[index];
-            let list = new DataTransfer();
-            list.items.add(element);
-            pdfsinglefile.files = list.files;
+        var input_file = document.getElementById('pdfsinglefile');
             if (input_file.value === "") {
             alert('Please provide a valid pdf file!');
             decoder.disabled = false;
@@ -363,7 +370,7 @@
         if (decodeType === "allpages") {
             console.log('all pages');
             setTimeout(() => {
-                PDFBarcodeJs.decodeDocument(pdfsinglefile, configs,
+                PDFBarcodeJs.decodeDocument(input_file, configs,
                 recordcallback, printTestImg
             );
             }, 3000);
@@ -375,10 +382,9 @@
                 decoder.disabled = false;
                 return false;
             }
-            PDFBarcodeJs.decodeSinglePage(pdfsinglefile, parseInt(pageNrInput.value), configs,
+            PDFBarcodeJs.decodeSinglePage(pdfen, parseInt(pageNrInput.value), configs,
                 recordcallback, printTestImg
             );
-        }
         }
         
     }
