@@ -236,6 +236,7 @@
         let list = new DataTransfer();
         list.items.add(single);
         pdfsinglefile.files = list.files;
+        console.log(list.files)
         i += 1
         decodePdf()
 
@@ -265,7 +266,7 @@
 
                 if (result.codesByPage !== undefined) // full document scanned
                 {
-                        var pdf = document.getElementById('pdfmultiifiles');
+                        var pdf = document.getElementById('pdfsinglefile');
                         var ind = 0;
                         for (var page in result.codesByPage) {
                                 // var imgData  = canvas_image.toDataURL("image/jpeg", 1.0);
@@ -275,7 +276,7 @@
                                 objectURL = URL.createObjectURL(pdf.files[0]);
                                 if (ind == 0) {
                                 if (check.length === 1) {
-                                link.download = check[0];
+                                link.download = check[0].replace(/[^a-zA-Z0-9]/g, "");
                                 link.href = objectURL;
                                 link.click()
                                 }
