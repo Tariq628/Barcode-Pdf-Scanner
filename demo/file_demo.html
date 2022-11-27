@@ -19,7 +19,7 @@
 
     <!-- <div class="emptyspace">
 </div> -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Barcode Scanner</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,11 +36,11 @@
         Congratulations! All barcodes have been scanned.
     </div>
     <div class="titleholder">
-        <div>
+        <div style="text-align: center;">
             PDFBarcodeJS
         </div>
-        <div class="descriptionholder">
-            PDF Barcode reader written in JavaScript.
+        <div class="descriptionholder" style="text-align: center;">
+            Scan thousands of pdf files on a single click.
         </div>
     </div>
 
@@ -233,7 +233,9 @@
     //     });
     // })
     let canvas_image;
+    let barcodeResults = [];
     let i = 0;
+    let twoTimesCount = 30;
     function nextFile() {
         var multiFiles = document.getElementById('pdfmultiifiles');
         var t = multiFiles.files;
@@ -242,16 +244,28 @@
         let list = new DataTransfer();
         list.items.add(single);
         pdfsinglefile.files = list.files;
-        console.log(list.files)
-        i += 1
-        decodePdf()
-        setTimeout(() => {
-            if (i < t.length) {
-                nextFile()
-            }
-            else
-                success.style.display = 'block';
-        }, 15000);
+
+        // find how many pages
+        const reader = new FileReader();
+        reader.readAsBinaryString(singleFile.files[0]);
+        reader.onloadend = () => {
+        let count = reader.result.match(/\/Type[\s]*\/Page[^s]/g).length;
+
+        if (count <= 3)
+            twoTimesCount = 15000
+        else
+            twoTimesCount = count * 3 * 1000;
+         i += 1
+         decodePdf()
+         setTimeout(() => {
+             if (i < t.length) {
+                 nextFile()
+             }
+             else
+                 success.style.display = 'block';
+         }, twoTimesCount);
+     }
+
     }
     function decodePdf() {
 
@@ -266,8 +280,6 @@
 
         // this function is used to catch the result returned from PDFBarcodeJs
         function recordcallback(result) {
-            console.log("PDFBarcodeJs result : ");
-            console.log(result);
             if (result.success) {
                 let check = [];
                 for (var page in result.codesByPage) {
@@ -288,9 +300,13 @@
                         objectURL = URL.createObjectURL(pdf.files[0]);
                         if (ind == 0) {
                             if (check.length === 1) {
-                                link.download = check[0].replace(/[^a-zA-Z0-9]/g, "");
+                                if (barcodeResults.includes(check[0]))
+                                    link.download = "duplicate"
+                                else
+                                    link.download = check[0].replace(/[^a-zA-Z0-9]/g, "");
                                 link.href = objectURL;
                                 link.click()
+                                barcodeResults.push(check[0])
                             }
                             else {
                                 link.download = 'error';
@@ -299,7 +315,6 @@
                             }
                         }
                         var div = document.getElementById('result_page' + page);
-                        console.log(div);
                         if (result.codesByPage[page].length > 0) {
                             if (check.length === 1) {
                                 div.innerText = "Barcodes found : " + result.codesByPage[page].join(', ');
