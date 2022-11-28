@@ -261,8 +261,11 @@
              if (i < t.length) {
                  nextFile()
              }
-             else
-                 success.style.display = 'block';
+             else{
+                decode_btn.innerHTML = 'Done';
+                success.style.display = 'block';
+
+             }
          }, twoTimesCount);
      }
 
